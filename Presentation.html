@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SlideFlow Presentation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .fade-in {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .nav-btn {
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(124, 58, 237, 0.2);
+    }
+    .nav-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 8px rgba(124, 58, 237, 0.3);
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 h-screen flex flex-col">
+  <main class="flex-grow flex items-center justify-center p-4 fade-in">
+    <img id="slide-image" src="slide1.jpg" alt="Presentation Slide"
+         class="max-w-full max-h-[70vh] object-contain rounded-lg shadow-xl">
+  </main>
+
+  <nav class="flex justify-between p-6 bg-white border-t border-gray-200">
+    <button id="prev-btn"
+            class="nav-btn bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-8 rounded-full text-lg">
+      Previous
+    </button>
+    <button id="next-btn"
+            class="nav-btn bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-8 rounded-full text-lg">
+      Next
+    </button>
+  </nav>
+
+  <script>
+    const totalSlides = 11;   // total number of slides
+    let currentSlide = 1;     // start at slide 1
+
+    function updateSlide() {
+      const image = document.getElementById('slide-image');
+      image.src = `slide${currentSlide}.jpg`;  // dynamically load slide image
+      image.alt = `Slide ${currentSlide}`;
+
+      document.title = `Slide ${currentSlide} - SlideFlow`;
+      image.classList.add('fade-in');
+      setTimeout(() => image.classList.remove('fade-in'), 500);
+
+      // enable/disable buttons
+      document.getElementById('prev-btn').disabled = currentSlide === 1;
+      document.getElementById('next-btn').disabled = currentSlide === totalSlides;
+    }
+
+    document.getElementById('prev-btn').addEventListener('click', () => {
+      if (currentSlide > 1) {
+        currentSlide--;
+        updateSlide();
+      }
+    });
+
+    document.getElementById('next-btn').addEventListener('click', () => {
+      if (currentSlide < totalSlides) {
+        currentSlide++;
+        updateSlide();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft' && currentSlide > 1) {
+        currentSlide--;
+        updateSlide();
+      } else if (e.key === 'ArrowRight' && currentSlide < totalSlides) {
+        currentSlide++;
+        updateSlide();
+      }
+    });
+
+    // initialize
+    updateSlide();
+  </script>
+</body>
+</html>
